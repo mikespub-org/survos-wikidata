@@ -33,12 +33,12 @@ class SearchResult
      * @param array $data
      * @param string $lang
      */
-    public function __construct($data, public $lang = 'en')
+    public function __construct(array $data, public $lang = 'en')
     {
         $this->parseData($data);
     }
 
-    private function parseData($data): void
+    private function parseData(array $data): void
     {
         $this->id = $data['id'] ?? null;
         $this->label = $data['label'] ?? null;

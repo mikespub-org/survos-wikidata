@@ -60,7 +60,7 @@ class ApiClient
      *
      * @return \Illuminate\Support\Collection
      */
-    public function searchEntities($query, $lang = 'en', int $limit = 10)
+    public function searchEntities($query, $lang = 'en', int $limit = 10): Collection
     {
         $response = $this->client->request('GET', self::API_ENDPOINT, [
             'query' => [
