@@ -10,100 +10,100 @@ use Wikidata\SparqlClient;
 
 class Wikidata
 {
-  /**
-   * Search entities by term
-   *
-   * @param string $query
-   * @param string $lang Language (default: en)
-   * @param int $limit Max count of returning items (default: 10)
-   *
-   * @return \Illuminate\Support\Collection Return collection of \Wikidata\SearchResult
-   */
-  public function search($query, $lang = 'en', int $limit = 10)
-  {
-    $client = new ApiClient();
+    /**
+     * Search entities by term
+     *
+     * @param string $query
+     * @param string $lang Language (default: en)
+     * @param int $limit Max count of returning items (default: 10)
+     *
+     * @return \Illuminate\Support\Collection Return collection of \Wikidata\SearchResult
+     */
+    public function search($query, $lang = 'en', int $limit = 10)
+    {
+        $client = new ApiClient();
 
-    $collection = $client->searchEntities($query, $lang, $limit);
+        $collection = $client->searchEntities($query, $lang, $limit);
 
-    $ids = $collection->pluck('id')->toArray();
+        $ids = $collection->pluck('id')->toArray();
 
-    $entities = $client->getEntities($ids, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels']);
+        $entities = $client->getEntities($ids, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels']);
 
-    $output = $entities->map(function ($item) use ($lang): \Wikidata\SearchResult {
-      $entity = new Entity($item, $lang);
-      return new SearchResult($entity->toArray(), $lang);
-    });
+        $output = $entities->map(function ($item) use ($lang): \Wikidata\SearchResult {
+            $entity = new Entity($item, $lang);
+            return new SearchResult($entity->toArray(), $lang);
+        });
 
-    return $output;
-  }
-
-  /**
-   * Search entities by property ID and it value
-   *
-   * @param string $property Wikidata ID of property (e.g.: P646)
-   * @param string $value String value of property or Wikidata entity ID (e.g.: Q11696)
-   * @param string $lang Language (default: en)
-   * @param int $limit Max count of returning items (default: 10)
-   *
-   * @return \Illuminate\Support\Collection Return collection of \Wikidata\SearchResult
-   */
-  public function searchBy(string $property, $value = null, string $lang = 'en', int $limit = 10)
-  {
-    if (!is_pid($property)) {
-      throw new Exception("First argument in searchBy() must be a valid Wikidata property ID (e.g.: P646).", 1);
+        return $output;
     }
 
-    if (!$value) {
-      throw new Exception("Second argument in searchBy() must be a string or a valid Wikidata entity ID (e.g.: Q646).", 1);
-    }
+    /**
+     * Search entities by property ID and it value
+     *
+     * @param string $property Wikidata ID of property (e.g.: P646)
+     * @param string $value String value of property or Wikidata entity ID (e.g.: Q11696)
+     * @param string $lang Language (default: en)
+     * @param int $limit Max count of returning items (default: 10)
+     *
+     * @return \Illuminate\Support\Collection Return collection of \Wikidata\SearchResult
+     */
+    public function searchBy(string $property, $value = null, string $lang = 'en', int $limit = 10)
+    {
+        if (!is_pid($property)) {
+            throw new Exception("First argument in searchBy() must be a valid Wikidata property ID (e.g.: P646).", 1);
+        }
 
-    $subject = is_qid($value) ? 'wd:' . $value : '"' . $value . '"';
+        if (!$value) {
+            throw new Exception("Second argument in searchBy() must be a string or a valid Wikidata entity ID (e.g.: Q646).", 1);
+        }
 
-    $query = '
+        $subject = is_qid($value) ? 'wd:' . $value : '"' . $value . '"';
+
+        $query = '
             SELECT ?item WHERE {
                 ?item wdt:' . $property . ' ' . $subject . '.
             } LIMIT ' . $limit . '
         ';
 
-    $client = new SparqlClient();
+        $client = new SparqlClient();
 
-    $data = $client->execute($query);
+        $data = $client->execute($query);
 
-    $ids = collect($data)->map(fn($data): string|array => str_replace("http://www.wikidata.org/entity/", "", $data['item']))->toArray();
+        $ids = collect($data)->map(fn($data): string|array => str_replace("http://www.wikidata.org/entity/", "", $data['item']))->toArray();
 
-    $client = new ApiClient();
+        $client = new ApiClient();
 
-    $entities = $client->getEntities($ids, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels']);
+        $entities = $client->getEntities($ids, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels']);
 
-    $output = $entities->map(function ($data) use ($lang): \Wikidata\SearchResult {
-      $entity = new Entity($data, $lang);
-      return new SearchResult($entity->toArray(), $lang);
-    });
+        $output = $entities->map(function ($data) use ($lang): \Wikidata\SearchResult {
+            $entity = new Entity($data, $lang);
+            return new SearchResult($entity->toArray(), $lang);
+        });
 
-    return $output;
-  }
-
-  /**
-   * Get entity by ID
-   *
-   * @param string $entityId Wikidata entity ID (e.g.: Q11696)
-   * @param string $lang Language
-   *
-   * @return \Wikidata\Entity Return entity
-   */
-  public function get(string $entityId, string $lang = 'en'): \Wikidata\Entity
-  {
-    if (!is_qid($entityId)) {
-      throw new Exception("First argument in get() must by a valid Wikidata entity ID (e.g.: Q646).", 1);
+        return $output;
     }
 
-    $api = new ApiClient();
+    /**
+     * Get entity by ID
+     *
+     * @param string $entityId Wikidata entity ID (e.g.: Q11696)
+     * @param string $lang Language
+     *
+     * @return \Wikidata\Entity Return entity
+     */
+    public function get(string $entityId, string $lang = 'en'): \Wikidata\Entity
+    {
+        if (!is_qid($entityId)) {
+            throw new Exception("First argument in get() must by a valid Wikidata entity ID (e.g.: Q646).", 1);
+        }
 
-    $data = $api->getEntities($entityId, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels'])->first();
+        $api = new ApiClient();
 
-    $entity = new Entity($data, $lang);
+        $data = $api->getEntities($entityId, $lang, ['sitelinks/urls', 'aliases', 'descriptions', 'labels'])->first();
 
-    $query = 'SELECT ?item ?prop ?propertyLabel ?statement ?propertyValue ?propertyValueLabel ?qualifier ?qualifierLabel ?qualifierValue ?qualifierValueLabel
+        $entity = new Entity($data, $lang);
+
+        $query = 'SELECT ?item ?prop ?propertyLabel ?statement ?propertyValue ?propertyValueLabel ?qualifier ?qualifierLabel ?qualifierValue ?qualifierValueLabel
         {
             VALUES (?item) {(wd:' . $entityId . ')}
             ?item ?prop ?statement .
@@ -114,12 +114,12 @@ class Wikidata
             SERVICE wikibase:label { bd:serviceParam wikibase:language "' . $lang . ',en" }
         }';
 
-    $client = new SparqlClient();
+        $client = new SparqlClient();
 
-    $data = $client->execute($query);
+        $data = $client->execute($query);
 
-    $entity->parseProperties($data);
+        $entity->parseProperties($data);
 
-    return $entity;
-  }
+        return $entity;
+    }
 }

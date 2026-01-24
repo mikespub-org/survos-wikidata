@@ -11,7 +11,7 @@ class ApiClient
     public const API_ENDPOINT = 'https://www.wikidata.org/w/api.php';
 
 
-    public function __construct(private ?HttpClientInterface $client=null)
+    public function __construct(private ?HttpClientInterface $client = null)
     {
         if (!$this->client) {
             $this->client = HttpClient::create();

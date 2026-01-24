@@ -6,27 +6,27 @@ use Wikidata\Qualifier;
 
 class QualifierTest extends TestCase
 {
-  protected $qualifier;
+    protected $qualifier;
 
-  public function setUp(): void
-  {
-    $this->qualifier = new Qualifier($this->dummyProperties[0]);
-  }
+    public function setUp(): void
+    {
+        $this->qualifier = new Qualifier($this->dummyProperties[0]);
+    }
 
-  public function testGetQualifierId(): void
-  {
-    $id = str_replace('http://www.wikidata.org/entity/', '', $this->dummyProperties[0]['qualifier']);
+    public function testGetQualifierId(): void
+    {
+        $id = str_replace('http://www.wikidata.org/entity/', '', $this->dummyProperties[0]['qualifier']);
 
-    $this->assertEquals($id, $this->qualifier->id);
-  }
+        $this->assertEquals($id, $this->qualifier->id);
+    }
 
-  public function testGetQualifierLabel(): void
-  {
-    $this->assertEquals($this->dummyProperties[0]['qualifierLabel'], $this->qualifier->label);
-  }
+    public function testGetQualifierLabel(): void
+    {
+        $this->assertEquals($this->dummyProperties[0]['qualifierLabel'], $this->qualifier->label);
+    }
 
-  public function testGetQualifierValue(): void
-  {
-    $this->assertEquals($this->dummyProperties[0]['qualifierValueLabel'], $this->qualifier->value);
-  }
+    public function testGetQualifierValue(): void
+    {
+        $this->assertEquals($this->dummyProperties[0]['qualifierValueLabel'], $this->qualifier->value);
+    }
 }

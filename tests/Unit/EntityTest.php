@@ -6,62 +6,62 @@ use Wikidata\Entity;
 
 class EntityTest extends TestCase
 {
-  protected $lang = 'es';
+    protected $lang = 'es';
 
-  protected $entity;
+    protected $entity;
 
-  public function setUp(): void
-  {
-    $this->entity = new Entity($this->dummy[0], $this->lang);
-  }
+    public function setUp(): void
+    {
+        $this->entity = new Entity($this->dummy[0], $this->lang);
+    }
 
-  public function testGetEntityId(): void
-  {
-    $this->assertEquals($this->dummy[0]['id'], $this->entity->id);
-  }
+    public function testGetEntityId(): void
+    {
+        $this->assertEquals($this->dummy[0]['id'], $this->entity->id);
+    }
 
-  public function testGetEntityLang(): void
-  {
-    $this->assertEquals($this->lang, $this->entity->lang);
-  }
+    public function testGetEntityLang(): void
+    {
+        $this->assertEquals($this->lang, $this->entity->lang);
+    }
 
-  public function testGetEntityLabel(): void
-  {
-    $this->assertEquals($this->dummy[0]['labels'][$this->lang]['value'], $this->entity->label);
-  }
+    public function testGetEntityLabel(): void
+    {
+        $this->assertEquals($this->dummy[0]['labels'][$this->lang]['value'], $this->entity->label);
+    }
 
-  public function testGetEntityDescription(): void
-  {
-    $this->assertEquals($this->dummy[0]['descriptions'][$this->lang]['value'], $this->entity->description);
-  }
+    public function testGetEntityDescription(): void
+    {
+        $this->assertEquals($this->dummy[0]['descriptions'][$this->lang]['value'], $this->entity->description);
+    }
 
-  public function testGetWikiUrl(): void
-  {
-    $this->assertEquals($this->dummy[0]['sitelinks'][$this->lang . 'wiki']['url'], $this->entity->wiki_url);
-  }
+    public function testGetWikiUrl(): void
+    {
+        $this->assertEquals($this->dummy[0]['sitelinks'][$this->lang . 'wiki']['url'], $this->entity->wiki_url);
+    }
 
-  public function testGetEntityAliases(): void
-  {
-    $aliases = collect($this->dummy[0]['aliases'][$this->lang])->pluck('value')->toArray();
+    public function testGetEntityAliases(): void
+    {
+        $aliases = collect($this->dummy[0]['aliases'][$this->lang])->pluck('value')->toArray();
 
-    $this->assertEquals($aliases, $this->entity->aliases);
-  }
+        $this->assertEquals($aliases, $this->entity->aliases);
+    }
 
-  public function testGetEntityWithoutAliases(): void
-  {
-    $entity = new Entity($this->dummy[1], 'en');
+    public function testGetEntityWithoutAliases(): void
+    {
+        $entity = new Entity($this->dummy[1], 'en');
 
-    $this->assertEquals([], $entity->aliases);
-  }
+        $this->assertEquals([], $entity->aliases);
+    }
 
-  public function testGetEntityProperties(): void
-  {
-    $this->entity->parseProperties($this->dummyProperties);
+    public function testGetEntityProperties(): void
+    {
+        $this->entity->parseProperties($this->dummyProperties);
 
-    $properties = $this->entity->properties;
+        $properties = $this->entity->properties;
 
-    $this->assertInstanceOf(\Illuminate\Support\Collection::class, $properties);
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $properties);
 
-    $this->assertInstanceOf(\Wikidata\Property::class, $properties->first());
-  }
+        $this->assertInstanceOf(\Wikidata\Property::class, $properties->first());
+    }
 }

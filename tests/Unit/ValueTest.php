@@ -6,31 +6,31 @@ use Wikidata\Value;
 
 class ValueTest extends TestCase
 {
-  protected $value;
+    protected $value;
 
-  public function setUp(): void
-  {
-    $this->value = new Value($this->dummyProperties);
-  }
+    public function setUp(): void
+    {
+        $this->value = new Value($this->dummyProperties);
+    }
 
-  public function testGetValueId(): void
-  {
-    $id = str_replace('http://www.wikidata.org/entity/', '', $this->dummyProperties[0]['propertyValue']);
+    public function testGetValueId(): void
+    {
+        $id = str_replace('http://www.wikidata.org/entity/', '', $this->dummyProperties[0]['propertyValue']);
 
-    $this->assertEquals($id, $this->value->id);
-  }
+        $this->assertEquals($id, $this->value->id);
+    }
 
-  public function testGetValueLabel(): void
-  {
-    $this->assertEquals($this->dummyProperties[0]['propertyValueLabel'], $this->value->label);
-  }
+    public function testGetValueLabel(): void
+    {
+        $this->assertEquals($this->dummyProperties[0]['propertyValueLabel'], $this->value->label);
+    }
 
-  public function testGetValueQualifiers(): void
-  {
-    $qualifiers = $this->value->qualifiers;
+    public function testGetValueQualifiers(): void
+    {
+        $qualifiers = $this->value->qualifiers;
 
-    $this->assertInstanceOf(\Illuminate\Support\Collection::class, $qualifiers);
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $qualifiers);
 
-    $this->assertInstanceOf(\Wikidata\Qualifier::class, $qualifiers->first());
-  }
+        $this->assertInstanceOf(\Wikidata\Qualifier::class, $qualifiers->first());
+    }
 }
