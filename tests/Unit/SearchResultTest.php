@@ -25,7 +25,7 @@ class SearchResultTest extends TestCase
 
         $collection = new Collection($this->dummy);
 
-        $this->result = new SearchResult($collection);
+        $this->result = new SearchResult($collection->toArray());
     }
 
     public function testGetResultId(): void
