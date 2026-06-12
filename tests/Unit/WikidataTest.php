@@ -24,12 +24,12 @@ class WikidataTest extends TestCase
 
         $this->assertInstanceOf(\Wikidata\SearchResult::class, $result);
 
-        $this->assertEquals(true, property_exists($result, 'id'));
-        $this->assertEquals(true, property_exists($result, 'lang'));
-        $this->assertEquals(true, property_exists($result, 'label'));
-        $this->assertEquals(true, property_exists($result, 'aliases'));
-        $this->assertEquals(true, property_exists($result, 'description'));
-        $this->assertEquals(true, property_exists($result, 'wiki_url'));
+        $this->assertObjectHasProperty('id', $result);
+        $this->assertObjectHasProperty('lang', $result);
+        $this->assertObjectHasProperty('label', $result);
+        $this->assertObjectHasProperty('aliases', $result);
+        $this->assertObjectHasProperty('description', $result);
+        $this->assertObjectHasProperty('wiki_url', $result);
     }
 
     public function testSearchOnAnotherLanguage(): void
@@ -66,12 +66,12 @@ class WikidataTest extends TestCase
 
         $this->assertInstanceOf(\Wikidata\SearchResult::class, $result);
 
-        $this->assertEquals(true, property_exists($result, 'id'));
-        $this->assertEquals(true, property_exists($result, 'lang'));
-        $this->assertEquals(true, property_exists($result, 'label'));
-        $this->assertEquals(true, property_exists($result, 'aliases'));
-        $this->assertEquals(true, property_exists($result, 'description'));
-        $this->assertEquals(true, property_exists($result, 'wiki_url'));
+        $this->assertObjectHasProperty('id', $result);
+        $this->assertObjectHasProperty('lang', $result);
+        $this->assertObjectHasProperty('label', $result);
+        $this->assertObjectHasProperty('aliases', $result);
+        $this->assertObjectHasProperty('description', $result);
+        $this->assertObjectHasProperty('wiki_url', $result);
     }
 
     public function testSearchByThrowExceptionIfSecondPropertyMissing(): void
@@ -105,12 +105,12 @@ class WikidataTest extends TestCase
 
         $this->assertInstanceOf(\Wikidata\Entity::class, $entity);
 
-        $this->assertEquals(true, property_exists($entity, 'id'));
-        $this->assertEquals(true, property_exists($entity, 'lang'));
-        $this->assertEquals(true, property_exists($entity, 'label'));
-        $this->assertEquals(true, property_exists($entity, 'aliases'));
-        $this->assertEquals(true, property_exists($entity, 'description'));
-        $this->assertEquals(true, property_exists($entity, 'wiki_url'));
+        $this->assertObjectHasProperty('id', $entity);
+        $this->assertObjectHasProperty('lang', $entity);
+        $this->assertObjectHasProperty('label', $entity);
+        $this->assertObjectHasProperty('aliases', $entity);
+        $this->assertObjectHasProperty('description', $entity);
+        $this->assertObjectHasProperty('wiki_url', $entity);
     }
 
     public function testGetEntityOnAnotherLanguage(): void

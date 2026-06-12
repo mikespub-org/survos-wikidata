@@ -9,12 +9,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ApiClient
 {
     public const API_ENDPOINT = 'https://www.wikidata.org/w/api.php';
+    public const USER_AGENT = 'Survos-Wikidata/6.0 (https://github.com/survos/wikidata)';
 
 
     public function __construct(private ?HttpClientInterface $client = null)
     {
         if (!$this->client) {
-            $this->client = HttpClient::create();
+            $this->client = HttpClient::create([
+                'headers' => [
+                    'User-Agent' => self::USER_AGENT,
+                ],
+            ]);
         }
     }
 

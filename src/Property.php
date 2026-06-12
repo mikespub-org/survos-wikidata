@@ -2,6 +2,7 @@
 
 namespace Wikidata;
 
+use Illuminate\Support\Collection;
 use Wikidata\Value;
 
 class Property
@@ -22,7 +23,7 @@ class Property
     public $values;
 
     /**
-     * @param array $data
+     * @param array|Collection $data
      */
     public function __construct($data)
     {
@@ -32,7 +33,7 @@ class Property
     /**
      * Parse input data
      *
-     * @param array $data
+     * @param array|Collection $data
      */
     private function parseData($data): void
     {

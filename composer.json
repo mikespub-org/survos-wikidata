@@ -28,7 +28,7 @@
   "require": {
     "php": ">=8.4",
     "illuminate/collections": "^12.0 || ^13.0",
-    "symfony/http-client": "^7.4 || ^8.0"
+    "symfony/http-client": "^7.4 || ^8.1"
   },
   "autoload": {
     "psr-4": {
@@ -45,8 +45,8 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "phpunit/phpunit": "^12.5 || ^13.1",
-    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.5 || ^13.2",
+    "phpstan/phpstan": "^2.2",
     "rector/rector": "^2.4"
   }
 }
